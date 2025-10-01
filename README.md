@@ -1,0 +1,2 @@
+# FinanceFlow API
+This project is a full-featured Expense Tracker API built with Flask, SQLAlchemy, and PostgreSQL, designed to demonstrate real-world backend and cloud engineering skills. It features JWT authentication, CRUD operations, role-based access control, unit and integration testing, and is production-deployed on AWS using Elastic Beanstalk, RDS, and S3, with a CI/CD pipeline via GitHub Actions. This project showcases practical experience in backend development, database design, cloud deployment, and DevOps practices.
