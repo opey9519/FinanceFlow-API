@@ -17,10 +17,10 @@ class ExpenseService:
         return expense
 
     def get_expense(self, expense_id):
-        return self.db.query(models.Expense).filter(models.Expense(id=expense_id))
+        return self.db.query(models.Expense).filter(models.Expense.id == expense_id).first()
 
     def list_expenses(self, user_id: int):
-        return self.db.query(models.Expense).filter(models.Expense(user_id=user_id)).all()
+        return self.db.query(models.Expense).filter(models.Expense.user_id == user_id).all()
 
     def update_expense(self, expense_update: schemas.ExpenseUpdate, expense_id: int):
         expense = self.get_expense(expense_id)
