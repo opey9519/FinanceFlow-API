@@ -1,0 +1,52 @@
+from fastapi import APIRouter, Depends, HTTPException, Response
+from sqlalchemy.orm import Session
+from typing import List
+from app.schemas import expense as schemas
+from app.services.auth_service import AuthService
+from app.deps import get_db
+from app.services.auth_service import get_user
+
+router = APIRouter(prefix="/auth", tags=["authentication"])
+
+
+@router.get("/{user_id}", response_model=List[schemas.UserOut])
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    service = AuthService(db)
+    user = service.get_user(user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+
+@router.post("/signup", response_model=schemas.UserOut)
+def sign_up(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
+    service = AuthService(db)
+    return service.sign_up(user_in)
+
+
+@router.post("/signin")
+def sign_in(user_in: schemas.UserLogin, response: Response, db: Session = Depends(get_db)):
+    service = AuthService(db)
+    auth_result = service.sign_in(user_in)
+
+    if not auth_result:
+        raise HTTPException(status_code=403, detail="Invalid credentials")
+
+    token = auth_result["access_token"]
+    response.set_cookie(
+        key="access_token",
+        value=f"Bearer {token}",
+        httponly=True,
+        samesite="lax",
+        secure=False
+    )
+
+    return {"message": "Login successful"}
+
+
+@router.post("/signout")
+def sign_out(response: Response):
+    response.delete_cookie("access_token")
+    return {"message": "Logged out successfully"}
