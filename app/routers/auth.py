@@ -3,10 +3,16 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.schemas import expense as schemas
 from app.services.auth_service import AuthService
-from app.deps import get_db
+from app.deps import get_db, get_current_user
 from app.services.auth_service import get_user
+from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
+
+
+@router.get("/me", response_model=schemas.UserOut)
+def read_current_user(current_user: User = Depends(get_current_user)):
+    return current_user
 
 
 @router.get("/{user_id}", response_model=List[schemas.UserOut])
