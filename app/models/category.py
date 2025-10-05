@@ -10,6 +10,6 @@ class Category(Base):
     name = Column(String, unique=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
-    user = relationship("User", back_populates="category")
+    user = relationship("User", back_populates="categories")
     expenses = relationship(
         "Expense", back_populates="category", cascade="all, delete")
