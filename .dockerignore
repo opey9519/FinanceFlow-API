@@ -1,0 +1,31 @@
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory/
+
+# Editor/IDE specific
+.idea/
+.vscode/
+*.swp
+*.bak
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+.env
+
+# Other common exclusions
+.git/
+Dockerfile
+docker-compose*.yml
+logs/
+tmp/
+*.log
+*.sqlite3
