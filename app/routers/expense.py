@@ -4,7 +4,7 @@ from typing import List
 from app.schemas import expense as schemas
 from app.services.expense_service import ExpenseService
 from app.deps import get_db
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
 
 # Router blueprint for expenses
 router = APIRouter(prefix="/expense", tags=["expenses"])
