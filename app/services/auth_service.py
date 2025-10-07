@@ -1,6 +1,7 @@
-from app.utils import PasswordManager, JWTManager
+from app.utils.auth import PasswordManager, JWTManager
 from sqlalchemy.orm import Session
-from app import models, schemas
+from app.models.user import User
+from app.schemas.user import UserBase, UserCreate, UserLogin, UserOut
 
 
 class AuthService:
@@ -8,17 +9,17 @@ class AuthService:
         self.db = db
 
     def get_user(self, user_id):
-        user = self.db.query(models.User).filter(
-            models.User.id == user_id).first()
+        user = self.db.query(User).filter(
+            User.id == user_id).first()
         return user
 
-    def sign_up(self, user_create: schemas.UserCreate):
+    def sign_up(self, user_create: UserCreate):
         username = user_create.username
         email = user_create.email
         password = PasswordManager.hash_password(user_create.password)
 
-        user = models.User(username=username, email=email,
-                           hashed_password=password)
+        user = User(username=username, email=email,
+                    hashed_password=password)
 
         self.db.add(user)
         self.db.commit()
@@ -26,11 +27,11 @@ class AuthService:
 
         return user
 
-    def sign_in(self, user_in: schemas.UserLogin):
+    def sign_in(self, user_in: UserLogin):
         email = user_in.email
 
-        user = self.db.query(models.User).filter(
-            models.User.email == email).first()
+        user = self.db.query(User).filter(
+            User.email == email).first()
         if not user or not PasswordManager.verify_password(user_in.password, user.hashed_password):
             return None
 

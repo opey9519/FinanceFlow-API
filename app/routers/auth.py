@@ -1,21 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from typing import List
-from app.schemas import expense as schemas
+from app.schemas.user import UserBase, UserCreate, UserLogin, UserOut
 from app.services.auth_service import AuthService
 from app.deps import get_db, get_current_user
-from app.services.auth_service import get_user
 from app.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
 
-@router.get("/me", response_model=schemas.UserOut)
+@router.get("/me", response_model=UserOut)
 def read_current_user(current_user: User = Depends(get_current_user)):
     return current_user
 
 
-@router.get("/{user_id}", response_model=List[schemas.UserOut])
+@router.get("/{user_id}", response_model=List[UserOut])
 def get_user(user_id: int, db: Session = Depends(get_db)):
     service = AuthService(db)
     user = service.get_user(user_id)
@@ -26,14 +25,14 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.post("/signup", response_model=schemas.UserOut)
-def sign_up(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
+@router.post("/signup", response_model=UserOut)
+def sign_up(user_in: UserCreate, db: Session = Depends(get_db)):
     service = AuthService(db)
     return service.sign_up(user_in)
 
 
 @router.post("/signin")
-def sign_in(user_in: schemas.UserLogin, response: Response, db: Session = Depends(get_db)):
+def sign_in(user_in: UserLogin, response: Response, db: Session = Depends(get_db)):
     service = AuthService(db)
     auth_result = service.sign_in(user_in)
 
