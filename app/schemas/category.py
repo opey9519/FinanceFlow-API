@@ -9,7 +9,7 @@ class CategoryCreate(CategoryBase):
     pass
 
 
-class CategoryOut:
+class CategoryOut(CategoryBase):
     id: int
     user_id: int
 

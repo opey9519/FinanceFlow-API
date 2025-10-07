@@ -1,12 +1,13 @@
 from sqlalchemy.orm import Session
-from app import models, schemas
+from app import models
+from app.schemas.category import CategoryBase, CategoryCreate, CategoryOut
 
 
 class CategoryService:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_category(self, user_id: int, category_in: schemas.CategoryCreate):
+    def create_category(self, user_id: int, category_in: CategoryCreate):
         existing = (self.db.query(models.Category).filter(
             models.Category.name == category_in.name, models.Category.user_id == user_id
         ).first())
