@@ -1,7 +1,7 @@
 from passlib.hash import bcrypt
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
-
+from app.config import settings
 # Password Manager object to hash + salt passwords & verify passwords
 
 
@@ -17,9 +17,9 @@ class PasswordManager:
 
 # Environment Variables
 # CHANGE THESE FROM EMPTY/NULL
-SECRET_KEY = ""
-ALGORITHM = ""
-ACCESS_TOKEN_EXPIRE_MINUTES = int
+SECRET_KEY = settings.JWT_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 # JSON Web Token Manager to encode & decode JWT tokens
 
