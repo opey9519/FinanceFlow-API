@@ -21,4 +21,4 @@ class ExpenseOut(ExpenseBase):
     user_id: int
 
     class Config:
-        orm_mode = True  # Allows Pydantic to read SQLAlchemy objects
+        from_attributes = True  # Allows Pydantic to read SQLAlchemy objects

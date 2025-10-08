@@ -12,4 +12,4 @@ class Category(Base):
 
     user = relationship("User", back_populates="categories")
     expenses = relationship(
-        "Expense", back_populates="categories", cascade="all, delete")
+        "Expense", back_populates="category", cascade="all, delete")

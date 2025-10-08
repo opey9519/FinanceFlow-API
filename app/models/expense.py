@@ -17,5 +17,5 @@ class Expense(Base):
     edited_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
-    user = relationship("User", back_populates="expense")
-    category = relationship("Category", back_populates="expense")
+    user = relationship("User", back_populates="expenses")
+    category = relationship("Category", back_populates="expenses")
