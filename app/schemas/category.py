@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CategoryBase(BaseModel):
     name: str
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CategoryCreate(CategoryBase):
@@ -12,6 +13,3 @@ class CategoryCreate(CategoryBase):
 class CategoryOut(CategoryBase):
     id: int
     user_id: int
-
-    class Config:
-        from_attributes = True

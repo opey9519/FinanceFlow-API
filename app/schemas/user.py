@@ -1,10 +1,11 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 
 
 class UserBase(BaseModel):
     username: str
     email: EmailStr
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserCreate(UserBase):
