@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.schemas.user import UserBase, UserCreate, UserLogin, UserOut
@@ -25,10 +25,15 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.post("/signup", response_model=UserOut)
+@router.post("/signup", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 def sign_up(user_in: UserCreate, db: Session = Depends(get_db)):
     service = AuthService(db)
-    return service.sign_up(user_in)
+    register_result = service.sign_up(user_in)
+
+    if not register_result:
+        raise HTTPException(status_code=409, detail="User already exists")
+
+    return register_result
 
 
 @router.post("/signin")

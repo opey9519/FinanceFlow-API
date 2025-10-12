@@ -14,6 +14,11 @@ class AuthService:
         return user
 
     def sign_up(self, user_create: UserCreate):
+        user = self.db.query(User).filter(
+            User.email == user_create.email).first()
+        if user:
+            return None
+
         username = user_create.username
         email = user_create.email
         password = PasswordManager.hash_password(user_create.password)

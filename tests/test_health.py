@@ -1,5 +1,4 @@
 from tests.conftest import client
-from fastapi import responses
 
 
 def test_health_endpoint(client):
