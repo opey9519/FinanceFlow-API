@@ -11,7 +11,7 @@ class Expense(Base):
     amount = Column(Float, nullable=False)
 
     user_id = Column(Integer, ForeignKey("users.id"))
-    category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
+    category_id = Column(Integer, ForeignKey("categories.id"))
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     edited_at = Column(DateTime(timezone=True), onupdate=func.now())

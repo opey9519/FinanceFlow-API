@@ -11,7 +11,10 @@ class ExpenseService:
 
     def create_expense(self, user_id: int, expense_in: ExpenseCreate):
         # Creates expense object from Expense model using user_id
-        expense = models.Expense(**expense_in.dict(), user_id=user_id)
+        expense = models.Expense(description=expense_in.description,
+                                 amount=expense_in.amount,
+                                 category_id=expense_in.category_id,
+                                 user_id=user_id)
         self.db.add(expense)
         self.db.commit()
         self.db.refresh(expense)

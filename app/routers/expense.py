@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.schemas import expense as schemas
@@ -14,10 +14,10 @@ router = APIRouter(prefix="/expense", tags=["expenses"])
 # -------------------------------
 
 
-@router.post("/", response_model=schemas.ExpenseOut)
+@router.post("/", response_model=schemas.ExpenseOut, status_code=status.HTTP_201_CREATED)
 def create_expense(expense_in: schemas.ExpenseCreate, db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     service = ExpenseService(db)
-    return service.create_expense(expense_in, user_id=current_user["id"])
+    return service.create_expense(current_user.id, expense_in)
 
 # -------------------------------
 # List All Expenses (for user)
@@ -27,7 +27,7 @@ def create_expense(expense_in: schemas.ExpenseCreate, db: Session = Depends(get_
 @router.get("/", response_model=List[schemas.ExpenseOut])
 def list_expenses(db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     service = ExpenseService(db)
-    return service.list_expenses(user_id=current_user["id"])
+    return service.list_expenses(user_id=current_user.id)
 
 # -------------------------------
 # Get Single Expense by ID
@@ -42,7 +42,7 @@ def get_expense(expense_id: int, db: Session = Depends(get_db), current_user: di
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
 
-    if expense.user_id != current_user["id"]:
+    if expense.user_id != current_user.id:
         raise HTTPException(
             status_code=403, detail="Not authorized to view this expense")
 
@@ -61,7 +61,7 @@ def update_expense(expense_id: int, expense_update: schemas.ExpenseUpdate, db: S
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
 
-    if expense.user_id != current_user["id"]:
+    if expense.user_id != current_user.id:
         raise HTTPException(
             status_code=403, detail="Not authorized to view this expense")
 
@@ -80,7 +80,7 @@ def delete_expense(expense_id: int, db: Session = Depends(get_db), current_user:
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
 
-    if expense.user_id != current_user["id"]:
+    if expense.user_id != current_user.id:
         raise HTTPException(
             status_code=403, detail="Not authorized to view this expense")
 

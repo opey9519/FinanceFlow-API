@@ -53,7 +53,8 @@ def sign_in(user_in: UserLogin, response: Response, db: Session = Depends(get_db
         secure=False
     )
 
-    return {"message": "Login successful"}
+    return {"message": "Login successful",
+            "access_token": token}
 
 
 @router.post("/signout")
